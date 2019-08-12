@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
-
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dsx.DSXExchange;
 import org.knowm.xchange.dsx.dto.trade.DSXCancelAllOrdersResult;
 import org.knowm.xchange.dsx.dto.trade.DSXOrder;
 import org.knowm.xchange.dsx.dto.trade.DSXTradeResult;
-import org.knowm.xchange.dsx.service.DSXTradeServiceRaw;
+import org.knowm.xchange.dsx.service.DSXTradeService;
 import org.knowm.xchange.dto.Order;
 import org.knowm.xchange.dto.trade.LimitOrder;
 import org.knowm.xchange.dto.trade.OpenOrders;
@@ -18,14 +18,12 @@ import org.knowm.xchange.examples.dsx.DSXExamplesUtils;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.service.trade.TradeService;
 
-/**
- * @author Mikhail Wall
- */
+/** @author Mikhail Wall */
 public class DSXTradeDemo {
 
   public static void main(String[] args) throws IOException {
 
-    Exchange dsx = DSXExamplesUtils.createExchange();
+    Exchange dsx = DSXExamplesUtils.createExchange(DSXExchange.class);
     generic(dsx);
     raw(dsx);
   }
@@ -36,7 +34,14 @@ public class DSXTradeDemo {
 
     printOpenOrders(tradeService);
 
-    LimitOrder limitOrder = new LimitOrder(Order.OrderType.BID, new BigDecimal("0.01"), CurrencyPair.BTC_USD, "", new Date(), new BigDecimal("900"));
+    LimitOrder limitOrder =
+        new LimitOrder(
+            Order.OrderType.BID,
+            new BigDecimal("0.01"),
+            CurrencyPair.BTC_USD,
+            "",
+            new Date(),
+            new BigDecimal("900"));
 
     String limitOrderReturnValue = null;
     try {
@@ -56,13 +61,22 @@ public class DSXTradeDemo {
 
   private static void rawCancelAllOrders(Exchange exchange) throws IOException {
 
-    DSXTradeServiceRaw tradeService = (DSXTradeServiceRaw) exchange.getTradeService();
+    DSXTradeService tradeService = (DSXTradeService) exchange.getTradeService();
 
     printRawOpenOrders(tradeService);
 
     DSXOrder.Type type = DSXOrder.Type.buy;
     String pair = "btcusd";
-    DSXOrder dsxOrder = new DSXOrder(pair, type, new BigDecimal("0.01"), new BigDecimal("900"), 0, DSXOrder.OrderType.limit);
+    DSXOrder dsxOrder =
+        new DSXOrder(
+            pair,
+            type,
+            new BigDecimal("0.01"),
+            new BigDecimal("900"),
+            new BigDecimal("900"),
+            0,
+            DSXOrder.OrderType.limit,
+            null);
 
     DSXTradeResult result = null;
     DSXTradeResult result1 = null;
@@ -93,14 +107,23 @@ public class DSXTradeDemo {
   }
 
   private static void raw(Exchange exchange) throws IOException {
-    DSXTradeServiceRaw tradeService = (DSXTradeServiceRaw) exchange.getTradeService();
+    DSXTradeService tradeService = (DSXTradeService) exchange.getTradeService();
 
     printRawOpenOrders(tradeService);
 
     // place buy order
     DSXOrder.Type type = DSXOrder.Type.buy;
     String pair = "btcusd";
-    DSXOrder dsxOrder = new DSXOrder(pair, type, new BigDecimal("0.1"), new BigDecimal("900"), 0, DSXOrder.OrderType.limit);
+    DSXOrder dsxOrder =
+        new DSXOrder(
+            pair,
+            type,
+            new BigDecimal("0.1"),
+            new BigDecimal("900"),
+            new BigDecimal("900"),
+            0,
+            DSXOrder.OrderType.limit,
+            null);
 
     DSXTradeResult result = null;
     try {
@@ -116,7 +139,6 @@ public class DSXTradeDemo {
     }
 
     printRawOpenOrders(tradeService);
-
   }
 
   private static void printOpenOrders(TradeService tradeService) throws IOException {
@@ -125,7 +147,7 @@ public class DSXTradeDemo {
     System.out.println("Open Orders: " + openOrders.toString());
   }
 
-  private static void printRawOpenOrders(DSXTradeServiceRaw tradeService) throws IOException {
+  private static void printRawOpenOrders(DSXTradeService tradeService) throws IOException {
 
     Map<Long, DSXOrder> openOrders = tradeService.getDSXActiveOrders(null);
     for (Map.Entry<Long, DSXOrder> entry : openOrders.entrySet()) {

@@ -1,10 +1,9 @@
 package org.knowm.xchange.poloniex.dto.trade;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Map;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PoloniexAccountBalance {
 
@@ -12,7 +11,8 @@ public class PoloniexAccountBalance {
   private final Map<String, BigDecimal> margin;
   private final Map<String, BigDecimal> lending;
 
-  public PoloniexAccountBalance(@JsonProperty("exchange") Map<String, BigDecimal> exchange,
+  public PoloniexAccountBalance(
+      @JsonProperty("exchange") Map<String, BigDecimal> exchange,
       @JsonProperty("margin") Map<String, BigDecimal> margin,
       @JsonProperty("lending") Map<String, BigDecimal> lending) {
     this.exchange = exchange;
@@ -21,24 +21,27 @@ public class PoloniexAccountBalance {
   }
 
   public Map<String, BigDecimal> getExchangeBalance() {
-    return Collections.unmodifiableMap(exchange);
+    return exchange != null ? Collections.unmodifiableMap(exchange) : Collections.emptyMap();
   }
 
   public Map<String, BigDecimal> getMarginBalance() {
-    return Collections.unmodifiableMap(margin);
+    return margin != null ? Collections.unmodifiableMap(margin) : Collections.emptyMap();
   }
 
   public Map<String, BigDecimal> getLendingBalance() {
-    return Collections.unmodifiableMap(lending);
+    return lending != null ? Collections.unmodifiableMap(lending) : Collections.emptyMap();
   }
 
   @Override
   public String toString() {
-    return "PoloniexAvailableAccountBalance{" +
-        "exchange=" + exchange +
-        ", margin=" + margin +
-        ", lending=" + lending +
-        '}';
+    return "PoloniexAvailableAccountBalance{"
+        + "exchange="
+        + exchange
+        + ", margin="
+        + margin
+        + ", lending="
+        + lending
+        + '}';
   }
 
   public enum ACCOUNT {

@@ -6,32 +6,41 @@
     },
     "ETH/BTC": {
       "price_scale": 8,
-      "min_amount": 0.00000001
+      "min_amount": 0.001
     },
     "LTC/AUD": {
       "price_scale": 2,
-      "min_amount": 0.00000001
+      "min_amount": 0.001
     },
     "ETH/AUD": {
       "price_scale": 2,
-      "min_amount": 0.00000001
+      "min_amount": 0.001
     },
     "XRP/AUD": {
-      "price_scale": 2,
-      "min_amount": 0.00000001
+      "price_scale": 4,
+      "min_amount": 0.01
     },
     "LTC/BTC": {
       "price_scale": 8,
-      "min_amount": 0.00000001
+      "min_amount": 0.001
     },
     "XRP/BTC": {
       "price_scale": 8,
-      "min_amount": 0.00000001
+      "min_amount": 0.01
     },
     "BCH/BTC": {
       "price_scale": 8,
-      "min_amount": 0.00000001
+      "min_amount": 0.001
+    },
+    "XLM/AUD": {
+      "price_scale": 4,
+      "min_amount": 0.001
+    },
+    "XLM/BTC": {
+      "price_scale": 8,
+      "min_amount": 0.001
     }
+
   },
   "currencies": {
     "BCH": {
@@ -51,6 +60,9 @@
     },
     "AUD": {
       "scale": 2
+    },
+    "XLM": {
+      "scale": 8
     }
   },
   "private_rate_limits": [

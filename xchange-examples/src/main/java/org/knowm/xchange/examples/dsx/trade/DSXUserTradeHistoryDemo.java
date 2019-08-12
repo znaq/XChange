@@ -2,24 +2,22 @@ package org.knowm.xchange.examples.dsx.trade;
 
 import java.io.IOException;
 import java.util.Map;
-
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dsx.DSXExchange;
 import org.knowm.xchange.dsx.dto.trade.DSXTradeHistoryResult;
-import org.knowm.xchange.dsx.service.DSXTradeServiceRaw;
+import org.knowm.xchange.dsx.service.DSXTradeService;
 import org.knowm.xchange.dsx.service.trade.params.DSXTradeHistoryParams;
 import org.knowm.xchange.dto.trade.UserTrades;
 import org.knowm.xchange.examples.dsx.DSXExamplesUtils;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.service.trade.TradeService;
 
-/**
- * @author Mikhail Wall
- */
+/** @author Mikhail Wall */
 public class DSXUserTradeHistoryDemo {
 
   public static void main(String[] args) throws IOException {
-    Exchange dsx = DSXExamplesUtils.createExchange();
+    Exchange dsx = DSXExamplesUtils.createExchange(DSXExchange.class);
     generic(dsx);
     raw(dsx);
   }
@@ -39,7 +37,7 @@ public class DSXUserTradeHistoryDemo {
   }
 
   private static void raw(Exchange exchange) throws IOException {
-    DSXTradeServiceRaw tradeService = (DSXTradeServiceRaw) exchange.getTradeService();
+    DSXTradeService tradeService = (DSXTradeService) exchange.getTradeService();
     Map<Long, DSXTradeHistoryResult> trades = null;
     try {
       trades = tradeService.getDSXTradeHistory(null, null, null, null, null, null, null);

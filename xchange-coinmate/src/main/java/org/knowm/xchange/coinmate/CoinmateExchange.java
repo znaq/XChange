@@ -23,22 +23,23 @@
  */
 package org.knowm.xchange.coinmate;
 
+import java.io.IOException;
 import org.knowm.xchange.BaseExchange;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeSpecification;
 import org.knowm.xchange.coinmate.service.CoinmateAccountService;
 import org.knowm.xchange.coinmate.service.CoinmateMarketDataService;
+import org.knowm.xchange.coinmate.service.CoinmateMetadataServiceRaw;
 import org.knowm.xchange.coinmate.service.CoinmateTradeService;
-import org.knowm.xchange.utils.nonce.CurrentTimeNonceFactory;
-
+import org.knowm.xchange.exceptions.ExchangeException;
+import org.knowm.xchange.utils.nonce.AtomicLongCurrentTimeIncrementalNonceFactory;
 import si.mazi.rescu.SynchronizedValueFactory;
 
-/**
- * @author Martin Stachon
- */
+/** @author Martin Stachon */
 public class CoinmateExchange extends BaseExchange implements Exchange {
 
-  private final SynchronizedValueFactory<Long> nonceFactory = new CurrentTimeNonceFactory();
+  private final SynchronizedValueFactory<Long> nonceFactory =
+      new AtomicLongCurrentTimeIncrementalNonceFactory();
 
   @Override
   public SynchronizedValueFactory<Long> getNonceFactory() {
@@ -50,13 +51,13 @@ public class CoinmateExchange extends BaseExchange implements Exchange {
     this.marketDataService = new CoinmateMarketDataService(this);
     this.accountService = new CoinmateAccountService(this);
     this.tradeService = new CoinmateTradeService(this);
-
   }
 
   @Override
   public ExchangeSpecification getDefaultExchangeSpecification() {
 
-    ExchangeSpecification exchangeSpecification = new ExchangeSpecification(this.getClass().getCanonicalName());
+    ExchangeSpecification exchangeSpecification =
+        new ExchangeSpecification(this.getClass().getCanonicalName());
     exchangeSpecification.setSslUri("https://coinmate.io");
     exchangeSpecification.setHost("coinmate.io");
     exchangeSpecification.setPort(80);
@@ -64,5 +65,11 @@ public class CoinmateExchange extends BaseExchange implements Exchange {
     exchangeSpecification.setExchangeDescription("Bitcoin trading made simple.");
 
     return exchangeSpecification;
+  }
+
+  @Override
+  public void remoteInit() throws IOException, ExchangeException {
+    CoinmateMetadataServiceRaw metadataService = new CoinmateMetadataServiceRaw(this);
+    exchangeMetaData = metadataService.getMetadata();
   }
 }

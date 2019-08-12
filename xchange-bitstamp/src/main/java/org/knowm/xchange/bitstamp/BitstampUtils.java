@@ -1,31 +1,21 @@
 package org.knowm.xchange.bitstamp;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
-
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.knowm.xchange.exceptions.ExchangeException;
 
-/**
- * A central place for shared Bitstamp properties
- */
+/** A central place for shared Bitstamp properties */
 public final class BitstampUtils {
 
-  private static final SimpleDateFormat DATE_FORMAT;
   public static final int MAX_TRANSACTIONS_PER_QUERY = 1000;
 
-  static {
-    DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
-  }
+  private static final FastDateFormat DATE_FORMAT =
+      FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone("UTC"));
 
-  /**
-   * private Constructor
-   */
-  private BitstampUtils() {
-
-  }
+  /** private Constructor */
+  private BitstampUtils() {}
 
   /**
    * Format a date String for Bitstamp
@@ -41,5 +31,4 @@ public final class BitstampUtils {
       throw new ExchangeException("Illegal date/time format", e);
     }
   }
-
 }

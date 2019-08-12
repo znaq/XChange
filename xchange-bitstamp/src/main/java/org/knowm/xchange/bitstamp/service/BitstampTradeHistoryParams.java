@@ -1,17 +1,24 @@
 package org.knowm.xchange.bitstamp.service;
 
+import java.util.Date;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.service.trade.params.TradeHistoryParamCurrencyPair;
 import org.knowm.xchange.service.trade.params.TradeHistoryParamOffset;
 import org.knowm.xchange.service.trade.params.TradeHistoryParamPaging;
 import org.knowm.xchange.service.trade.params.TradeHistoryParamsSorted;
+import org.knowm.xchange.service.trade.params.TradeHistoryParamsTimeSpan;
 
 public class BitstampTradeHistoryParams
-    implements TradeHistoryParamCurrencyPair, TradeHistoryParamsSorted, TradeHistoryParamOffset, TradeHistoryParamPaging {
+    implements TradeHistoryParamCurrencyPair,
+        TradeHistoryParamsSorted,
+        TradeHistoryParamOffset,
+        TradeHistoryParamPaging,
+        TradeHistoryParamsTimeSpan {
   private CurrencyPair currencyPair;
   private Order order;
   private Integer offset;
   private Integer pageLength;
+  private Date startTime;
 
   public BitstampTradeHistoryParams(CurrencyPair currencyPair, Integer pageLength) {
     this.currencyPair = currencyPair;
@@ -58,16 +65,41 @@ public class BitstampTradeHistoryParams
   }
 
   @Override
+  public Integer getPageNumber() {
+    return (offset == null || pageLength == null) ? null : offset / pageLength;
+  }
+
+  @Override
+  public Date getStartTime() {
+    return startTime;
+  }
+
+  /**
+   * This will fetch historic user trades with a timestamp greater than or equal to startTime.
+   *
+   * @param startTime a start time with seconds precision. Milliseconds will be truncated.
+   */
+  @Override
+  public void setStartTime(Date startTime) {
+    this.startTime = startTime;
+  }
+
+  @Override
+  public Date getEndTime() {
+    return null;
+  }
+
+  @Override
+  public void setEndTime(Date endTime) {
+    throw new UnsupportedOperationException("Bitstamp doesn't support end time");
+  }
+
+  @Override
   public void setPageNumber(Integer pageNumber) {
     if (pageNumber == null) {
       setOffset(null);
     } else if (pageLength != null) {
       this.offset = pageNumber * pageLength;
     }
-  }
-
-  @Override
-  public Integer getPageNumber() {
-    return (offset == null || pageLength == null) ? null : offset / pageLength;
   }
 }

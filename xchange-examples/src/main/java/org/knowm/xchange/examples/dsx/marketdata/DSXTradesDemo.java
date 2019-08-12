@@ -2,19 +2,16 @@ package org.knowm.xchange.examples.dsx.marketdata;
 
 import java.io.IOException;
 import java.util.Map;
-
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dsx.DSXExchange;
 import org.knowm.xchange.dsx.dto.marketdata.DSXTrade;
-import org.knowm.xchange.dsx.service.DSXMarketDataServiceRaw;
+import org.knowm.xchange.dsx.service.DSXMarketDataService;
 import org.knowm.xchange.dto.marketdata.Trades;
 import org.knowm.xchange.service.marketdata.MarketDataService;
 
-/**
- * @author Mikhail Wall
- */
+/** @author Mikhail Wall */
 public class DSXTradesDemo {
 
   public static void main(String[] args) throws IOException {
@@ -35,9 +32,10 @@ public class DSXTradesDemo {
 
   private static void raw(Exchange exchange) throws IOException {
 
-    DSXMarketDataServiceRaw marketDataService = (DSXMarketDataServiceRaw) exchange.getMarketDataService();
+    DSXMarketDataService marketDataService = (DSXMarketDataService) exchange.getMarketDataService();
 
-    Map<String, DSXTrade[]> trades = marketDataService.getDSXTrades("btcusd", 7, "LIVE").getTradesMap();
+    Map<String, DSXTrade[]> trades =
+        marketDataService.getDSXTrades("btcusd", 7, "LIVE").getTradesMap();
 
     for (Map.Entry<String, DSXTrade[]> entry : trades.entrySet()) {
       System.out.println("Pair: " + entry.getKey() + ", Trades:");
